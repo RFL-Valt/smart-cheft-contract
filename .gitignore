@@ -1,0 +1,14 @@
+node_modules
+
+#Hardhat files
+cache
+artifacts
+
+cache
+deployments
+
+.env
+
+package-lock.json
+
+/abi
