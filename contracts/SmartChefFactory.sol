@@ -213,14 +213,6 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
         emit EmergencyWithdraw(msg.sender, user.amount);
     }
 
-    /*
-     * @notice Stop rewards
-     * @dev Only callable by owner. Needs to be for emergency.
-     */
-    function emergencyRewardWithdraw(uint256 _amount) external onlyOwner {
-        rewardToken.safeTransfer(address(msg.sender), _amount);
-    }
-
     /**
      * @notice It allows the admin to recover wrong tokens sent to the contract
      * @param _tokenAddress: the address of the token to withdraw
@@ -246,14 +238,6 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     }
 
     /*
-     * @notice Stop rewards
-     * @dev Only callable by owner
-     */
-    function stopReward() external onlyOwner {
-        bonusEndBlock = block.number;
-    }
-
-    /*
      * @notice Update pool limit per user
      * @dev Only callable by owner.
      * @param _hasUserLimit: whether the limit remains forced
@@ -275,17 +259,6 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
             poolLimitPerUser = 0;
         }
         emit NewPoolLimit(poolLimitPerUser);
-    }
-
-    /*
-     * @notice Update reward per block
-     * @dev Only callable by owner.
-     * @param _rewardPerBlock: the reward per block
-     */
-    function updateRewardPerBlock(uint256 _rewardPerBlock) external onlyOwner {
-        require(block.number < startBlock, "Pool has started");
-        rewardPerBlock = _rewardPerBlock;
-        emit NewRewardPerBlock(_rewardPerBlock);
     }
 
     /**
@@ -415,8 +388,6 @@ contract SmartChefFactory is Ownable {
         uint256 _poolLimitPerUser,
         address _admin
     ) external onlyOwner {
-        require(_stakedToken.totalSupply() >= 0);
-        require(_rewardToken.totalSupply() >= 0);
         require(_stakedToken != _rewardToken, "Tokens must be be different");
 
         bytes memory bytecode = type(SmartChefInitializable).creationCode;
