@@ -17,7 +17,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     using SafeERC20 for IERC20;
 
     // The address of the smart chef factory
-    address public SMART_CHEF_FACTORY;
+    address public immutable SMART_CHEF_FACTORY;
 
     // Whether a limit is set for users
     bool public hasUserLimit;
