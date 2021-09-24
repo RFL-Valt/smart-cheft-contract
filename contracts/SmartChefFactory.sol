@@ -6,15 +6,15 @@ import "./libraries/Ownable.sol";
 import "./libraries/SafeMath.sol";
 import "./libraries/ReentrancyGuard.sol";
 import "./libraries/Address.sol";
-import "./libraries/SafeERC20.sol";
+import "./libraries/SafeBEP20.sol";
 
-import "./interfaces/IERC20.sol";
+import "./interfaces/IBEP20.sol";
 
 // File: contracts/SmartChefInitializable.sol
 
 contract SmartChefInitializable is Ownable, ReentrancyGuard {
     using SafeMath for uint256;
-    using SafeERC20 for IERC20;
+    using SafeBEP20 for IBEP20;
 
     // The address of the smart chef factory
     address public immutable SMART_CHEF_FACTORY;
@@ -47,10 +47,10 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
     uint256 public PRECISION_FACTOR;
 
     // The reward token
-    IERC20 public rewardToken;
+    IBEP20 public rewardToken;
 
     // The staked token
-    IERC20 public stakedToken;
+    IBEP20 public stakedToken;
 
     // Info of each user that stakes tokens (stakedToken)
     mapping(address => UserInfo) public userInfo;
@@ -84,8 +84,8 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
      * @param _admin: admin address with ownership
      */
     function initialize(
-        IERC20 _stakedToken,
-        IERC20 _rewardToken,
+        IBEP20 _stakedToken,
+        IBEP20 _rewardToken,
         uint256 _rewardPerBlock,
         uint256 _startBlock,
         uint256 _bonusEndBlock,
@@ -232,7 +232,7 @@ contract SmartChefInitializable is Ownable, ReentrancyGuard {
             "Cannot be reward token"
         );
 
-        IERC20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
+        IBEP20(_tokenAddress).safeTransfer(address(msg.sender), _tokenAmount);
 
         emit AdminTokenRecovery(_tokenAddress, _tokenAmount);
     }
@@ -380,8 +380,8 @@ contract SmartChefFactory is Ownable {
      * @return address of new smart chef contract
      */
     function deployPool(
-        IERC20 _stakedToken,
-        IERC20 _rewardToken,
+        IBEP20 _stakedToken,
+        IBEP20 _rewardToken,
         uint256 _rewardPerBlock,
         uint256 _startBlock,
         uint256 _bonusEndBlock,
